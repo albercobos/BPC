@@ -32,9 +32,10 @@ $stock_data->load_from_file($stock_data_file, $gene_data); 	#call load_from_file
 
 $stock_data->write_database($new_stock_data);		#current stock data, new database filenames
 #the line above creates the file new_stock_data.tsv with the current status of seeds and dates
-
-&process_cross_data($cross_data_file,$stock_data,$gene_data);		#call process_cross_data subruotine
+my $chi=0;
+$chi=&process_cross_data($cross_data_file,$stock_data,$gene_data);		#call process_cross_data subruotine
 #the line above test the linkage. The Gene_Object become updated with the others genes they are linked to
+print "Recording: Genes are linked with a chi score of $chi\n";
 
 print "\n\nFinal Report:\n\n";	
 
@@ -51,6 +52,7 @@ foreach my $gene (keys %{$gene_data}){
     }
   }
 }
+
 
 #===================================SUBROUTINES=========================================================
 
@@ -154,6 +156,7 @@ sub process_cross_data{
 	push @{$Parent2->Mutant_gene_ID->{Linkage_To}}, $linked;		#in the property of Linkage_To
 	$linked=$Parent2->Mutant_gene_ID;
 	push @{$Parent1->Mutant_gene_ID->{Linkage_To}}, $linked;
+	return $chi;
       }
     }
   }
